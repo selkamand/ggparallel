@@ -18,39 +18,39 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN status](https://www.r-pkg.org/badges/version/ggparallel)](https://CRAN.R-project.org/package=ggparallel)
+[![R-CMD-check](https://github.com/selkamand/ggparallel/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/selkamand/ggparallel/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/selkamand/ggparallel/graph/badge.svg)](https://app.codecov.io/gh/selkamand/ggparallel)
 <!-- badges: end -->
 
-The goal of ggparallel is to ...
+ggparallel makes it easy to produce parallel coordinate plots.
 
 ## Installation
 
 You can install the development version of ggparallel like so:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+if (!require("remotes"))
+    install.packages("remotes")
+
+remotes::install_github("selkamand/ggparallel")
 ```
 
-## Example
+## Quick Start
 
-This is a basic example which shows you how to solve a common problem:
 
-```{r example}
+
+```{r quick_start}
 library(ggparallel)
-## basic example code
+
+ggparallel(iris)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
 
-```{r cars}
-summary(cars)
+More complex datasets, for example the dry bean [dataset](https://archive.ics.uci.edu/dataset/602/dry+bean+dataset) from the UCI Machine learning Repository
+```{r}
+drybeans <- read.csv(system.file(package = "ggparallel", "dry_beans.csv"))
+
+ggparallel(drybeans)
+ggparallel(drybeans, col_colour = "Class")
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.

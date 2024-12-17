@@ -1,0 +1,66 @@
+---
+title: "axis_sorting_with_linear_programming"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{axis_sorting_with_linear_programming}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(ggparallel)
+library(lpSolve)
+```
+
+A major challenge when visualizing parallel coordinate plots is to choose the order in which axes should be displayed.
+
+Here we describe an approach that involves
+
+1.  For each pair of dimensions, count how many crossings occur. (Could be extended to support axis inversions by inverting the axis and computing the same)
+2.  Conceptualise this pairwise matrix as a graph, where nodes are each dimensions, and edges the number of crossings between them. Our problem is finding the 'shortest' (i.e. lowest total crossings) path through the graph that visits each node once.
+3.  Convert this to the [travelling salesman problem](https://en.wikipedia.org/wiki/Travelling_salesman_problem) by adding an extra vertex that is connected to every other vertex with '0' crossings.
+4.  Formulate the travelling salesman problem as an integer linear program (e.g. a linear integer minimisation function + constraints). We use the [Dantzig–Fulkerson–Johnson formulation](https://en.wikipedia.org/wiki/Travelling_salesman_problem#Dantzig%E2%80%93Fulkerson%E2%80%93Johnson_formulation) (DFJ)
+5.  Solve using `lpSolve` (requires representing the DFJ formulation in matrix form).
+
+### Understanding our formulas
+
+Imagine we have 3 dimensions $Height, Width, & Depth$
+
+The objective function we want to minimise is
+
+$$
+TotalCrossings = c_\text{hw} . x_\text{hw} + 
+c_\text{wh} . x_\text{wh} + c_\text{hd} . x_\text{hd}   + c_\text{dh} . x_\text{dh}  + 
+c_\text{wd} . x_\text{wd} + c_\text{dw} . x_\text{dw} + c_\text{wd} . x_\text{wd}
+\newline
+\text{Where }:\newline
+ c_{hw} = \text{crossings between height and width columns}\newline
+ x_{hw} = \text{0 or 1, indicating whether height will be directly followed by width}
+$$
+
+**Constraints**
+
+const.mat
+
+$$
+
+$$
+
+### Data to Supply to `lpSolve::lp()` function:
+
+1.  `direction = "min"` because we want to minimise our metric
+
+2.  `objective.in` = vector of crossings
+
+3.  `const.dir` Vector of
+
+\$\$
+
+\$\$
